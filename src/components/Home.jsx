@@ -2,10 +2,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import useGetProduct from "../hooks/useGetProduct";
 import { Pencil, Trash2 } from "lucide-react";
+import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 
 const Home = () => {
   const { allProduct, isLoading, refetch } = useGetProduct();
-  console.log(allProduct);
+  const {sizeAndQuantity,isLoading:sizeQuanLoading,refetch:sizeAndQuanLoading}=useSizeAndQuantityCalc(allProduct?.map(product=>product?._id || []));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -13,18 +14,16 @@ const Home = () => {
     const name = form.name.value;
     const size = form.size.value;
     const quantity = form.quantity.value;
-    const amount = form.amount.value;
-    const total = form.total.value;
+    const rate=form.rate.value;
 
     const productData = {
       name,
       size,
       quantity,
-      amount,
-      total,
+      rate
     };
 
-    if (!name || !size || !quantity || !amount || !total) {
+    if (!name || !size || !quantity || !rate) {
       toast.error("please fill all data");
       return;
     }
@@ -55,6 +54,8 @@ const Home = () => {
             <li className="w-full font-bold">Name</li>
             <li className="w-full font-bold">Size</li>
             <li className="w-full font-bold">Quantity</li>
+            <li className="w-full font-bold">SQ.FT</li>
+            <li className="w-full font-bold">Rate</li>
             <li className="w-full font-bold">amount</li>
             <li className="w-full font-bold">Total</li>
             <li className="w-full font-bold">Actions</li>
@@ -118,24 +119,16 @@ const Home = () => {
                   </li>
                   <li>
                     <input
-                      name="amount"
+                      name="rate"
                       type="text"
-                      placeholder="Amount"
-                      className="w-full p-2 border border-gray-300"
-                    />
-                  </li>
-                  <li>
-                    <input
-                      name="total"
-                      type="text"
-                      placeholder="Total"
+                      placeholder="Current Rate"
                       className="w-full p-2 border border-gray-300"
                     />
                   </li>
                   <li>
                     <button
                       type="submit"
-                      className="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br dark:focus:ring-blue-800 font-medium text-sm px-5 py-2.5 text-center ml-2"
+                      className="text-white w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br dark:focus:ring-blue-800 font-medium text-sm px-5 py-2.5 text-center ml-2"
                     >
                       Save
                     </button>
