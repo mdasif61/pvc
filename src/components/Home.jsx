@@ -6,7 +6,11 @@ import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 
 const Home = () => {
   const { allProduct, isLoading, refetch } = useGetProduct();
-  const {sizeAndQuantity,isLoading:sizeQuanLoading,refetch:sizeAndQuanLoading}=useSizeAndQuantityCalc(allProduct?.map(product=>product?._id || []));
+  const {
+    sizeAndQuantity,
+    isLoading: sizeQuanLoading,
+    refetch: sizeAndQuanLoading,
+  } = useSizeAndQuantityCalc(allProduct?.map((product) => product?._id || []));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -14,13 +18,16 @@ const Home = () => {
     const name = form.name.value;
     const size = form.size.value;
     const quantity = form.quantity.value;
-    const rate=form.rate.value;
+    const rate = form.rate.value;
 
     const productData = {
       name,
       size,
       quantity,
-      rate
+      rate,
+      sqft: "",
+      amount: "",
+      total: "",
     };
 
     if (!name || !size || !quantity || !rate) {
@@ -40,6 +47,7 @@ const Home = () => {
         config
       );
       if (response.status === 201) {
+        refetch();
         toast.success("successfully saved!");
         console.log(response.data);
       }
@@ -48,7 +56,7 @@ const Home = () => {
 
   return (
     <div className="flex w-full gap-6 min-h-screen items-center justify-center">
-      <div className="w-2/4 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-80">
+      <div className="w-2/4 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
         <div className="w-full flex flex-col">
           <ul className="flex items-center border-b-2 border-black pb-1 justify-between">
             <li className="w-full font-bold">Name</li>
@@ -56,36 +64,75 @@ const Home = () => {
             <li className="w-full font-bold">Quantity</li>
             <li className="w-full font-bold">SQ.FT</li>
             <li className="w-full font-bold">Rate</li>
-            <li className="w-full font-bold">amount</li>
-            <li className="w-full font-bold">Total</li>
-            <li className="w-full font-bold">Actions</li>
+            <li className="w-full font-bold">T. Amount</li>
+            <li className="w-full font-bold">Found</li>
+            {/* <li className="w-full font-bold">Actions</li> */}
           </ul>
           <div className="w-full h-full pt-2">
             {allProduct?.map((product) => (
               <div className="flex justify-between border-b">
                 <div className="w-full">
-                  <p>{product.name}</p>
+                  <input
+                    readOnly
+                    value={product.name}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
                 </div>
                 <div className="w-full">
-                  <p>{product.size}</p>
+                  <input
+                    readOnly
+                    value={product.size}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
                 </div>
                 <div className="w-full">
-                  <p>{product.quantity}</p>
+                  <input
+                    readOnly
+                    value={product.quantity}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
                 </div>
                 <div className="w-full">
-                  <p>{product.amount}</p>
+                  <input
+                    readOnly
+                    value={product.sqft}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
                 </div>
                 <div className="w-full">
-                  <p>{product.total}</p>
+                  <input
+                    readOnly
+                    value={product.rate}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
                 </div>
-                <div className="flex items-center w-full">
+                <div className="w-full">
+                  <input
+                    readOnly
+                    value={product.amount}
+                    className="border-none focus:ring-0 w-full"
+                    type="text"
+                  />
+                </div>
+                <div className="w-full">
+                  <input
+                    className="border-b font-bold focus:ring-0 border-r-0 border-l-0 border-t-0  outline-none w-full"
+                    type="text"
+                  />
+                </div>
+                {/* <div className="flex items-center w-full">
                   <button className="text-blue-500 hover:text-blue-400">
                     <Pencil className="w-5 h-5 mx-1" />
                   </button>
                   <button className="text-red-500 hover:text-red-400">
                     <Trash2 className="w-5 h-5 mx-1" />
                   </button>
-                </div>
+                </div> */}
               </div>
             ))}
           </div>
