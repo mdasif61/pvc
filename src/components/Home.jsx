@@ -3,8 +3,30 @@ import { toast } from "react-toastify";
 import useGetProduct from "../hooks/useGetProduct";
 import { Pencil, Trash2 } from "lucide-react";
 import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
+import moment from "moment";
+import Folder from "./Folder";
 
 const Home = () => {
+  const folderStructure = [
+    {
+      name: "Folder 1",
+      type: "folder",
+      children: [
+        { name: "File 1.txt", type: "file" },
+        {
+          name: "Subfolder 1",
+          type: "folder",
+          children: [{ name: "File 2.txt", type: "file" }],
+        },
+      ],
+    },
+    {
+      name: "Folder 2",
+      type: "folder",
+      children: [{ name: "File 2.txt", type: "file" }],
+    },
+  ];
+
   const { allProduct, isLoading, refetch } = useGetProduct();
   const {
     sizeAndQuantity,
@@ -71,19 +93,22 @@ const Home = () => {
           <div className="w-full h-full pt-2">
             {allProduct?.map((product) => (
               <div className="flex justify-between border-b">
-                <div className="w-full">
+                <div className="w-full relative flex flex-col">
                   <input
                     readOnly
                     value={product.name}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none font-medium p-0 focus:ring-0 w-full"
                     type="text"
                   />
+                  <span className="text-xs absolute -bottom-0 left-0 text-gray-500">
+                    {moment(product.createdAt).format("D MMMM Y")}
+                  </span>
                 </div>
                 <div className="w-full">
                   <input
                     readOnly
                     value={product.size}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none p-0 focus:ring-0 w-full"
                     type="text"
                   />
                 </div>
@@ -91,7 +116,7 @@ const Home = () => {
                   <input
                     readOnly
                     value={product.quantity}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none p-0 focus:ring-0 w-full"
                     type="text"
                   />
                 </div>
@@ -99,7 +124,7 @@ const Home = () => {
                   <input
                     readOnly
                     value={product.sqft}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none p-0 focus:ring-0 w-full"
                     type="text"
                   />
                 </div>
@@ -107,7 +132,7 @@ const Home = () => {
                   <input
                     readOnly
                     value={product.rate}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none p-0 focus:ring-0 w-full"
                     type="text"
                   />
                 </div>
@@ -115,7 +140,7 @@ const Home = () => {
                   <input
                     readOnly
                     value={product.amount}
-                    className="border-none focus:ring-0 w-full"
+                    className="border-none p-0 focus:ring-0 w-full"
                     type="text"
                   />
                 </div>
@@ -180,6 +205,12 @@ const Home = () => {
                       Save
                     </button>
                   </li>
+                  <li
+                    title="create folder"
+                    className="cursor-pointer text-2xl hover:text-xl ml-5 items-center"
+                  >
+                    Create 📁
+                  </li>
                 </ul>
               </div>
             </form>
@@ -187,7 +218,10 @@ const Home = () => {
         </div>
       </div>
       <div className="w-1/4 h-[450px] bg-white p-6 backdrop-blur-xl opacity-80">
-        <h1>Div two</h1>
+        <h1>Folder System</h1>
+        {folderStructure.map((folder, index) => (
+          <Folder key={index} folder={folder} />
+        ))}
       </div>
     </div>
   );
