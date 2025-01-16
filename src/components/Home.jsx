@@ -5,29 +5,11 @@ import { Pencil, Trash2 } from "lucide-react";
 import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 import moment from "moment";
 import Folder from "./Folder";
+import useGetFolder from "../hooks/useGetFolder";
 
 const Home = () => {
-  const folderStructure = [
-    {
-      name: "Folder 1",
-      type: "folder",
-      children: [
-        { name: "File 1.txt", type: "file" },
-        {
-          name: "Subfolder 1",
-          type: "folder",
-          children: [{ name: "File 2.txt", type: "file" }],
-        },
-      ],
-    },
-    {
-      name: "Folder 2",
-      type: "folder",
-      children: [{ name: "File 2.txt", type: "file" }],
-    },
-  ];
-
   const { allProduct, isLoading, refetch } = useGetProduct();
+  const {allFolder,folderFetch}=useGetFolder();
   const {
     sizeAndQuantity,
     isLoading: sizeQuanLoading,
@@ -76,6 +58,39 @@ const Home = () => {
     } catch (error) {}
   };
 
+  const folderStructure = [
+    {
+      name: "New Folder",
+      type: "folder",
+      children: [
+        { name: "New Folder", type: "folder" },
+        {
+          name: "Subfolder 1",
+          type: "folder",
+          children: [],
+        },
+      ],
+      work:[]
+    }
+  ];
+
+  const createFolder = async () => {
+    const config={
+      headers:{
+        "Content-type":"application/json"
+      }
+    }
+
+    const response=await axios.post("http://localhost:5000/api/new-folder", folderStructure,config)
+
+    if(response.status===201){
+      refetch();
+      toast.success("Folder created")
+      console.log(response.data)
+    }
+
+  };
+
   return (
     <div className="flex w-full gap-6 min-h-screen items-center justify-center">
       <div className="w-2/4 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
@@ -91,6 +106,10 @@ const Home = () => {
             {/* <li className="w-full font-bold">Actions</li> */}
           </ul>
           <div className="w-full h-full pt-2">
+            {allFolder?.map((folder)=>(
+              <Folder folder={folder}/>
+            ))}
+            
             {allProduct?.map((product) => (
               <div className="flex justify-between border-b">
                 <div className="w-full relative flex flex-col">
@@ -206,10 +225,11 @@ const Home = () => {
                     </button>
                   </li>
                   <li
+                    onClick={createFolder}
                     title="create folder"
                     className="cursor-pointer text-2xl hover:text-xl ml-5 items-center"
                   >
-                    Create 📁
+                    📁
                   </li>
                 </ul>
               </div>
