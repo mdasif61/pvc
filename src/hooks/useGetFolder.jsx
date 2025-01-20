@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const useGetFolder = () => {
-  const {data:allFolder,refetch:folderFetch} = useQuery({
+  const {data:allFolder,refetch:folderFetch, isLoading} = useQuery({
     queryKey: ["all-folder"],
     queryFn: async () => {
       try {
@@ -15,7 +15,7 @@ const useGetFolder = () => {
       }
     },
   });
-  return {allFolder,folderFetch}
+  return {allFolder,folderFetch,isLoading}
 };
 
 export default useGetFolder;

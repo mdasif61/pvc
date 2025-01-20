@@ -1,13 +1,19 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 
 const Folder = ({ folder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleFolder = () => setIsOpen(!isOpen);
-  console.log(folder);
+  const navigate = useNavigate();
+
+  const getFolder = (folder) => {
+    navigate(`/folders/${folder?._id}`, { state: { folder } });
+  };
 
   return (
     <div style={{ marginLeft: "10px" }}>
       <div
+        onDoubleClick={() => getFolder(folder)}
         onClick={toggleFolder}
         className={`cursor-pointer ${
           folder.type === "folder" ? "font-semibold" : "font-normal"
