@@ -6,11 +6,14 @@ import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 import moment from "moment";
 import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 const Home = () => {
   const { allProduct, isLoading, refetch } = useGetProduct();
-  const {allFolder,folderFetch}=useGetFolder();
+  const { allFolder, folderFetch } = useGetFolder();
+  const location = useLocation().pathname.split("/");
+  const id = location[2];
+
   const {
     sizeAndQuantity,
     isLoading: sizeQuanLoading,
@@ -40,23 +43,47 @@ const Home = () => {
       return;
     }
 
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const response = await axios.post(
-        "http://localhost:5000/api/addProduct",
-        productData,
-        config
-      );
-      if (response.status === 201) {
-        refetch();
-        toast.success("successfully saved!");
-        console.log(response.data);
+    if (!id) {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
+        const response = await axios.post(
+          "http://localhost:5000/api/addProduct",
+          productData,
+          config
+        );
+        if (response.status === 201) {
+          refetch();
+          toast.success("successfully saved!");
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {}
+    } else {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+          },
+        };
+        const response = await axios.patch(
+          `http://localhost:5000/api/addwork/${id}`,
+          productData,
+          config
+        );
+        if (response.status === 201) {
+          refetch();
+          toast.success("successfully saved!");
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const folderStructure = [
@@ -71,25 +98,28 @@ const Home = () => {
           children: [],
         },
       ],
-      work:[]
-    }
+      work: [],
+    },
   ];
 
   const createFolder = async () => {
-    const config={
-      headers:{
-        "Content-type":"application/json"
-      }
-    }
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
 
-    const response=await axios.post("http://localhost:5000/api/new-folder", folderStructure,config)
+    const response = await axios.post(
+      "http://localhost:5000/api/new-folder",
+      folderStructure,
+      config
+    );
 
-    if(response.status===201){
+    if (response.status === 201) {
       refetch();
-      toast.success("Folder created")
-      console.log(response.data)
+      toast.success("Folder created");
+      console.log(response.data);
     }
-
   };
 
   return (
@@ -107,11 +137,11 @@ const Home = () => {
             {/* <li className="w-full font-bold">Actions</li> */}
           </ul>
           <div className="w-full h-full pt-2">
-            {allFolder?.map((folder)=>(
-              <Folder folder={folder}/>
+            {allFolder?.map((folder) => (
+              <Folder folder={folder} />
             ))}
-            
-            <Outlet/>
+
+            <Outlet />
           </div>
           <div className="items-end absolute m-2 bottom-0 left-0">
             <form onSubmit={handleSubmit} className="w-full">
@@ -171,7 +201,7 @@ const Home = () => {
         </div>
       </div>
       <div className="w-1/4 h-[450px] bg-white p-6 backdrop-blur-xl opacity-80">
-       <h1>summary</h1>
+        <h1>summary</h1>
       </div>
     </div>
   );
