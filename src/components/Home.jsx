@@ -91,12 +91,7 @@ const Home = () => {
       name: "New Folder",
       type: "folder",
       children: [
-        { name: "New Folder", type: "folder" },
-        {
-          name: "Subfolder 1",
-          type: "folder",
-          children: [],
-        },
+        
       ],
       work: [],
     },
@@ -138,7 +133,7 @@ const Home = () => {
           </ul>
           <div className="w-full h-full pt-2">
             {allFolder?.map((folder) => (
-              <Folder folder={folder} />
+              <Folder key={folder._id} folder={folder} />
             ))}
 
             <Outlet />
