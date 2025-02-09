@@ -11,7 +11,7 @@ const Folder = ({ folder }) => {
   };
 
   return (
-    <div style={{ marginLeft: "10px" }}>
+    <div>
       <div
         onDoubleClick={() => getFolder(folder)}
         onClick={toggleFolder}

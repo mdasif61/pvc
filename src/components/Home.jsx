@@ -36,6 +36,8 @@ const Home = () => {
       sqft: "",
       amount: "",
       total: "",
+      collectedTk: "",
+      dues: ""
     };
 
     if (!name || !size || !quantity || !rate) {
@@ -76,7 +78,7 @@ const Home = () => {
           config
         );
         if (response.status === 201) {
-          refetch();
+          folderFetch()
           toast.success("successfully saved!");
           console.log(response.data);
         }
@@ -91,9 +93,9 @@ const Home = () => {
       name: "New Folder",
       type: "folder",
       children: [
-        
+
       ],
-      work: [],
+      work: [ ],
     },
   ];
 
@@ -112,14 +114,15 @@ const Home = () => {
 
     if (response.status === 201) {
       refetch();
+      folderFetch()
       toast.success("Folder created");
       console.log(response.data);
     }
   };
 
   return (
-    <div className="flex w-full gap-6 min-h-screen items-center justify-center">
-      <div className="w-2/4 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
+    <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
+      <div className="w-3/5 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
         <div className="w-full flex flex-col">
           <ul className="flex items-center border-b-2 border-black pb-1 justify-between">
             <li className="w-full font-bold">Name</li>
@@ -128,10 +131,11 @@ const Home = () => {
             <li className="w-full font-bold">SQ.FT</li>
             <li className="w-full font-bold">Rate</li>
             <li className="w-full font-bold">T. Amount</li>
-            <li className="w-full font-bold">Found</li>
-            {/* <li className="w-full font-bold">Actions</li> */}
+            <li className="w-full font-bold">Collected</li>
+            <li className="w-full font-bold">Dues</li>
+            <li className="w-full font-bold">Actions</li>
           </ul>
-          <div className="w-full h-full pt-2">
+          <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
             {allFolder?.map((folder) => (
               <Folder key={folder._id} folder={folder} />
             ))}
@@ -179,7 +183,7 @@ const Home = () => {
                       type="submit"
                       className="text-white w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br dark:focus:ring-blue-800 font-medium text-sm px-5 py-2.5 text-center ml-2"
                     >
-                      Save
+                      Post
                     </button>
                   </li>
                   <li

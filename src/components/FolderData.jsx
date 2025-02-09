@@ -13,7 +13,7 @@ const FolderData = () => {
     return (
         <div>
             {filterFolder?.work?.map((folderWork)=>(
-                <ReusableWork product={folderWork}/>
+                <ReusableWork key={folderWork._id} product={folderWork}/>
             ))}
         </div>
     );
