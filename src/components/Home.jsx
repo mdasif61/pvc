@@ -7,8 +7,10 @@ import moment from "moment";
 import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
 import { Outlet, useLocation } from "react-router";
+import { useState } from "react";
 
 const Home = () => {
+  const [activeFolderId,setActiveFolderId]=useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
   const location = useLocation().pathname.split("/");
@@ -96,6 +98,7 @@ const Home = () => {
 
       ],
       work: [ ],
+      parent:activeFolderId
     },
   ];
 
@@ -137,7 +140,7 @@ const Home = () => {
           </ul>
           <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
             {allFolder?.map((folder) => (
-              <Folder key={folder._id} folder={folder} />
+              <Folder key={folder._id} setActiveFolderId={setActiveFolderId} folder={folder} />
             ))}
 
             <Outlet />
