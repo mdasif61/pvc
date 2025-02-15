@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import useGetFolder from "../hooks/useGetFolder";
 import { ArrowBigLeft } from "lucide-react";
 
-const Folder = ({ folder, setActiveFolderId, parentPath = "" }) => {
+const Folder = ({ folder, setActiveFolderId, index }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleFolder = () => setIsOpen(!isOpen);
   const [rename, setRename] = useState(false);
@@ -13,6 +13,7 @@ const Folder = ({ folder, setActiveFolderId, parentPath = "" }) => {
   const [contextMenu, setContextMenu] = useState(null);
   const [isFolderOpened, setIsFolderOpened] = useState(false);
   const navigate = useNavigate();
+
 
   const location = useLocation().pathname.split("/");
   const folderPageId = location[2];
@@ -102,12 +103,11 @@ const Folder = ({ folder, setActiveFolderId, parentPath = "" }) => {
         </div>
         {isOpen && folder.children?.length > 0 && (
           <div className="ml-4">
-            {folder.children.map((child, index) => (
+            {folder.children.map((child) => (
               <Folder
                 key={child._id}
                 folder={child}
                 setActiveFolderId={setActiveFolderId}
-                parentPath={`${parentPath ? `${parentPath}.` : ""}${index}`}
               />
             ))}
           </div>

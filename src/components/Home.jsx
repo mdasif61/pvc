@@ -16,6 +16,7 @@ const Home = () => {
   const location = useLocation().pathname.split("/");
   const id = location[2];
 
+
   const {
     sizeAndQuantity,
     isLoading: sizeQuanLoading,
@@ -139,8 +140,8 @@ const Home = () => {
             <li className="w-full font-bold">Actions</li>
           </ul>
           <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
-            {allFolder?.map((folder) => (
-              <Folder key={folder._id} setActiveFolderId={setActiveFolderId} folder={folder} />
+            {allFolder?.rootFolders?.map((folder,index) => (
+              <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} folder={folder} />
             ))}
 
             <Outlet />

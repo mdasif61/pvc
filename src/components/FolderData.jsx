@@ -7,9 +7,10 @@ import { ArrowLeft } from 'lucide-react';
 const FolderData = () => {
     const {id}=useParams();
     const {allFolder}=useGetFolder();
+    const filterFolder=allFolder?.rootFolders?.find((folder)=>folder._id===id);
     
-    const filterFolder=allFolder?.find((folder)=>folder._id===id);
-    
+    const subfolders=allFolder?.subfolders?.find((subfolder)=>subfolder._id===id);
+
 
     return (
         <div>
@@ -17,6 +18,10 @@ const FolderData = () => {
             {filterFolder?.work?.map((folderWork)=>(
                 <ReusableWork key={folderWork._id} product={folderWork}/>
             ))}
+            {subfolders&& subfolders?.work?.map((folderWork)=>(
+                <ReusableWork key={folderWork._id} product={folderWork}/>
+            ))}
+            
         </div>
     );
 };
