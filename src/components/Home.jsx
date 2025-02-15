@@ -6,15 +6,16 @@ import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 import moment from "moment";
 import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
-import { Outlet, useLocation } from "react-router";
+import { Outlet, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 
 const Home = () => {
-  const [activeFolderId,setActiveFolderId]=useState(null)
+  const [currentFolderId, setCurrentFolderId] = useState(null);
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
   const location = useLocation().pathname.split("/");
   const id = location[2];
+  const navigate = useNavigate();
 
   const {
     sizeAndQuantity,
@@ -90,38 +91,67 @@ const Home = () => {
     }
   };
 
-  const folderStructure = [
-    {
-      name: "New Folder",
-      type: "folder",
-      children: [
-
-      ],
-      work: [ ],
-      parent:activeFolderId
-    },
-  ];
 
   const createFolder = async () => {
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-      },
-    };
+    const folderName = "New Folder"; // Default name for the new folder
 
-    const response = await axios.post(
-      "http://localhost:5000/api/new-folder",
-      folderStructure,
-      config
-    );
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
 
-    if (response.status === 201) {
-      refetch();
-      folderFetch()
-      toast.success("Folder created");
-      console.log(response.data);
+      // Create the new folder with the current folder as its parent
+      const response = await axios.post(
+        "http://localhost:5000/api/new-folder",
+        {
+          name: folderName,
+          parentFolderId: currentFolderId, // Set the current folder as the parent
+        },
+        config
+      );
+
+      if (response.status === 201) {
+        folderFetch(); // Refresh the folder list
+        toast.success("Folder created successfully!");
+        console.log("Folder created:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating folder:", error);
+      toast.error("Failed to create folder");
     }
   };
+  
+  const handleNavigate = (folder) => {
+    setCurrentFolderId(folder._id); // Update the current folder ID
+    navigate(`/folders/${folder._id}`); // Navigate to the folder's page
+  };
+
+  const handleRename = async (folderId, newName) => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const response = await axios.patch(
+        `http://localhost:5000/api/rename-folder/${folderId}`,
+        { name: newName },
+        config
+      );
+
+      if (response.status === 200) {
+        folderFetch(); // Refresh the folder list
+        toast.success("Folder renamed successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to rename folder:", error);
+      toast.error("Failed to rename folder");
+    }
+  };
+
 
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
@@ -138,10 +168,28 @@ const Home = () => {
             <li className="w-full font-bold">Dues</li>
             <li className="w-full font-bold">Actions</li>
           </ul>
+
           <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
-            {allFolder?.map((folder) => (
-              <Folder key={folder._id} setActiveFolderId={setActiveFolderId} folder={folder} />
-            ))}
+          {currentFolderId ? (
+              <Folder
+                folder={allFolder.find((f) => f._id === currentFolderId)} // Find the current folder
+                onNavigate={handleNavigate} // Pass the navigate function
+                onRename={handleRename}
+              />
+            ) : (
+              allFolder?.map((folder) => (
+                <div
+                  key={folder._id}
+                  onDoubleClick={() => handleNavigate(folder)} // Double-click to navigate
+                >
+                  <Folder
+                    folder={folder}
+                    onNavigate={handleNavigate} // Pass the navigate function
+                    onRename={handleRename}
+                  />
+                </div>
+              ))
+            )}
 
             <Outlet />
           </div>
