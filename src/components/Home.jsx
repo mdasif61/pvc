@@ -8,6 +8,7 @@ import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
 import { Outlet, useLocation } from "react-router";
 import { useState } from "react";
+import Expense from "./Expense";
 
 const Home = () => {
   const [activeFolderId,setActiveFolderId]=useState(null)
@@ -204,7 +205,7 @@ const Home = () => {
         </div>
       </div>
       <div className="w-1/4 h-[450px] bg-white p-6 backdrop-blur-xl opacity-80">
-        <h1>summary</h1>
+        <Expense/>
       </div>
     </div>
   );
