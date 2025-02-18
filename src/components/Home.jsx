@@ -9,13 +9,16 @@ import useGetFolder from "../hooks/useGetFolder";
 import { Outlet, useLocation } from "react-router";
 import { useState } from "react";
 import Expense from "./Expense";
+import useGetTotalCollected from "../hooks/useGetTotalCollected";
 
 const Home = () => {
   const [activeFolderId,setActiveFolderId]=useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
+  const {totalCollectedTk,totalCollectedTkRefetch}=useGetTotalCollected()
   const location = useLocation().pathname.split("/");
   const id = location[2];
+  console.log(totalCollectedTk)
 
 
   const {
