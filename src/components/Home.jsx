@@ -1,15 +1,14 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import useGetProduct from "../hooks/useGetProduct";
-import { Pencil, Trash2 } from "lucide-react";
 import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
-import moment from "moment";
 import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
 import { Outlet, useLocation } from "react-router";
 import { useState } from "react";
 import Expense from "./Expense";
 import useGetTotalCollected from "../hooks/useGetTotalCollected";
+import TopMenu from "./TopMenu";
 
 const Home = () => {
   const [activeFolderId,setActiveFolderId]=useState(null)
@@ -131,6 +130,9 @@ const Home = () => {
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
       <div className="w-3/5 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
+
+        <TopMenu/>
+
         <div className="w-full flex flex-col">
           <ul className="flex items-center border-b-2 border-black pb-1 justify-between">
             <li className="w-full font-bold">Name</li>
