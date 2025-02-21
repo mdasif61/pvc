@@ -54,7 +54,7 @@ const ReusableWork = ({ product }) => {
                         {moment(product.createdAt).format("D MMMM Y")}
                     </span>
                 </div>
-                <div className="w-full">
+                <div className="w-full ">
                     <input
                         readOnly
                         value={product.size}
