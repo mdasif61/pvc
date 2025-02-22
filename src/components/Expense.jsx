@@ -54,8 +54,8 @@ const Expense = () => {
 
             <form onSubmit={saveExpense} className='absolute w-full flex flex-col bottom-0 left-0'>
                 <div className='flex'>
-                    <input onChange={(e) => setExpenseTitle(e.target.value)} className='w-full' type="text" placeholder='Type your title' />
-                    <input onChange={(e) => setExpenseAmount(e.target.value)} className='w-full' type="text" placeholder='Type your amount' />
+                    <input onChange={(e) => setExpenseTitle(e.target.value)} className='w-full border focus:ring-0 focus:outline-none px-2 h-10' type="text" placeholder='Type your title' />
+                    <input onChange={(e) => setExpenseAmount(e.target.value)} className='w-full border focus:ring-0 focus:outline-none px-2 h-10' type="text" placeholder='Enter your amount' />
                 </div>
                 <button className='w-full font-semibold mt-1 py-2 bg-red-600 text-white ' type='submit'>Submit</button>
             </form>

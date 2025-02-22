@@ -95,7 +95,7 @@ const Details = () => {
                         </div>
                     </div>
                 </div>
-                <div className='w-1/2 h-[650px] overflow-y-scroll'>
+                <div className='w-1/2 h-[620px] overflow-y-scroll'>
                     {
                        dipositeData?.map((diposite,index)=><EachDiposite
                        key={index}

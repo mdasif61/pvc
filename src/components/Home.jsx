@@ -136,8 +136,8 @@ const Home = () => {
         <div className="w-full flex flex-col">
           <ul className="flex items-center border-b-2 border-black pb-1 justify-between">
             <li className="w-full font-bold">Name</li>
-            <li className="w-full font-bold">Size</li>
-            <li className="w-full font-bold">Quantity</li>
+            <li className="w-full font-bold text-center">Size</li>
+            <li className="w-full font-bold text-center">Quantity</li>
             <li className="w-full font-bold">SQ.FT</li>
             <li className="w-full font-bold">Rate</li>
             <li className="w-full font-bold">T. Amount</li>
