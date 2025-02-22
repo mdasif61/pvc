@@ -114,11 +114,10 @@ const ReusableWork = ({ product }) => {
                         type="text"
                     />
                 </div>
-                <div className="flex items-center w-full">
+                <div className="flex items-center text-center w-full">
                     <button onClick={() => {
                         handleCollectedAndDues(product._id)
-                    }} className={`h-full bg-blue-600
-                   w-full text-white hover:text-blue-400`}>
+                    }} className={`h-full w-full text-center btn btn-neutral rounded-none`}>
                         Save
                     </button>
                 </div>

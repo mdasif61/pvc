@@ -134,16 +134,16 @@ const Home = () => {
         <TopMenu/>
 
         <div className="w-full flex flex-col">
-          <ul className="flex items-center border-b-2 border-black pb-1 justify-between">
+          <ul className="flex items-center border-b-2 mr-5 border-black pb-1 justify-between">
             <li className="w-full font-bold">Name</li>
             <li className="w-full font-bold text-center">Size</li>
             <li className="w-full font-bold text-center">Quantity</li>
-            <li className="w-full font-bold">SQ.FT</li>
-            <li className="w-full font-bold">Rate</li>
-            <li className="w-full font-bold">T. Amount</li>
-            <li className="w-full font-bold">Collected</li>
-            <li className="w-full font-bold">Dues</li>
-            <li className="w-full font-bold">Actions</li>
+            <li className="w-full font-bold text-center">SQ.FT</li>
+            <li className="w-full font-bold text-center">Rate</li>
+            <li className="w-full font-bold text-center">T. Amount</li>
+            <li className="w-full font-bold text-center">Collected</li>
+            <li className="w-full font-bold text-center">Dues</li>
+            <li className="w-full font-bold text-center">Actions</li>
           </ul>
           <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
             {allFolder?.rootFolders?.map((folder,index) => (
@@ -193,7 +193,7 @@ const Home = () => {
                       type="submit"
                       className="text-white w-full bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br dark:focus:ring-blue-800 font-medium text-sm px-5 py-2.5 text-center ml-2"
                     >
-                      Post
+                      Upload
                     </button>
                   </li>
                   <li
