@@ -145,7 +145,7 @@ const Home = () => {
             <li className="w-full font-bold text-center">Dues</li>
             <li className="w-full font-bold text-center">Actions</li>
           </ul>
-          <div className="w-full overflow-y-scroll h-[335px] mb-5 pt-2">
+          <div className="w-full overflow-y-scroll h-[300px] mb-5 pt-2">
             {allFolder?.rootFolders?.map((folder,index) => (
               <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} folder={folder} />
             ))}
