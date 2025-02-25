@@ -9,12 +9,14 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import useGetDiposite from '../hooks/useGetDiposite';
 import EachDiposite from './EachDiposite';
+import { ArrowLeft, MoveLeft } from 'lucide-react';
+import { Link } from 'react-router';
 
 const Details = () => {
     const { totalCollectedTk } = useGetTotalCollected();
     const { totalExpenseAmount } = useGetTotalExpense();
-    const {dipositeData,dipositeFetch}=useGetDiposite();
-    const [dipositeAmount,setDipositeAmount]=useState("");
+    const { dipositeData, dipositeFetch } = useGetDiposite();
+    const [dipositeAmount, setDipositeAmount] = useState("");
 
     console.log(dipositeData)
 
@@ -28,28 +30,28 @@ const Details = () => {
         setDateRange(ranges.selection)
     };
 
-    const handleDiposite=async()=>{
-        const dipositeData={
-            diposite:dipositeAmount,
-            ACamount:totalCollectedTk-totalExpenseAmount.toString(),
-            totalCollected:totalCollectedTk.toString(),
-            totalExpense:totalExpenseAmount.toString(),
-            date:dateRange
+    const handleDiposite = async () => {
+        const dipositeData = {
+            diposite: dipositeAmount,
+            ACamount: totalCollectedTk - totalExpenseAmount.toString(),
+            totalCollected: totalCollectedTk.toString(),
+            totalExpense: totalExpenseAmount.toString(),
+            date: dateRange
         };
 
-        if(!dipositeAmount || !totalCollectedTk || !totalExpenseAmount || !totalCollectedTk || !dateRange.startDate || !dateRange.endDate){
+        if (!dipositeAmount || !totalCollectedTk || !totalExpenseAmount || !totalCollectedTk || !dateRange.startDate || !dateRange.endDate) {
             toast.error('please fill every fields')
             return;
         }
 
         try {
-            const config={
-                headers:{
-                    "Content-type":"application/json"
+            const config = {
+                headers: {
+                    "Content-type": "application/json"
                 }
             }
-            const response=await axios.post('http://localhost:5000/api/diposite-in-office',dipositeData,config)
-            if(response.status===201){
+            const response = await axios.post('http://localhost:5000/api/diposite-in-office', dipositeData, config)
+            if (response.status === 201) {
                 dipositeFetch()
                 toast.success('Diposite Successfull')
                 setDipositeAmount("")
@@ -63,7 +65,10 @@ const Details = () => {
     return (
         <div className='w-full flex items-center justify-center min-h-screen mx-auto bg-transparent'>
             <div className='flex gap-3 items-center justify-center w-4/6 mx-auto'>
-                <div className='w-1/2 min-h-[500px] bg-white p-6 backdrop-blur-2xl opacity-90'>
+                <div className='w-1/2 relative min-h-[500px] bg-white p-6 backdrop-blur-2xl opacity-90'>
+                    <div className='absolute rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 p-2 tex-lg top-0 -left-16'>
+                        <Link to='/'><ArrowLeft/></Link>
+                    </div>
                     <div className='mb-4'>
                         <div className='flex  items-center justify-between'>
                             <h1 className='text-lg'>Total Collected :</h1>
@@ -87,8 +92,8 @@ const Details = () => {
                                 ranges={[dateRange]}
                                 onChange={handleDatePickerRange}
                             />
-                            <input onChange={(e)=>setDipositeAmount(e.target.value)} className='bg-transparent text-center border-blue-600 outline-none text-white focus:outline-none focus:ring-0 placeholder:text-white' type="text" placeholder='Enter Amount' name="" id="" />
-                            <button onClick={handleDiposite} className='bg-blue-700 hover:bg-blue-500 text-white text-lg px-2 py-1'>Diposite in office</button>
+                            <input onChange={(e) => setDipositeAmount(e.target.value)} className='bg-transparent text-center border-blue-600 outline-none text-white focus:outline-none focus:ring-0 placeholder:text-white' type="text" placeholder='Enter Amount' name="" id="" />
+                            <button disabled={totalCollectedTk<totalExpenseAmount || dipositeAmount===""} onClick={handleDiposite} className={`${totalCollectedTk<totalExpenseAmount || dipositeAmount===""?"bg-blue-300 hover:bg-blue-300":"bg-blue-700 hover:bg-blue-500"} text-white text-lg px-2 py-1`}>Diposite in office</button>
                         </div>
                         <div className='w-full text-center'>
                             <h1 className='font-semibold text-lg'> From <span className='text-purple-700'>{moment(dateRange.startDate).format("D MMMM Y")}</span> To <span className='text-purple-700'>{moment(dateRange.endDate).format("D MMMM Y")}</span></h1>
@@ -97,10 +102,10 @@ const Details = () => {
                 </div>
                 <div className='w-1/2 h-[620px] overflow-y-scroll'>
                     {
-                       dipositeData?.map((diposite,index)=><EachDiposite
-                       key={index}
-                       diposite={diposite}
-                       />) 
+                        dipositeData?.map((diposite, index) => <EachDiposite
+                            key={index}
+                            diposite={diposite}
+                        />)
                     }
                 </div>
             </div>

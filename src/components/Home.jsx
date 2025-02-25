@@ -5,16 +5,18 @@ import useSizeAndQuantityCalc from "../hooks/useSizeAndQuantityCalc";
 import Folder from "./Folder";
 import useGetFolder from "../hooks/useGetFolder";
 import { Outlet, useLocation } from "react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Expense from "./Expense";
 import useGetTotalCollected from "../hooks/useGetTotalCollected";
 import TopMenu from "./TopMenu";
 
 const Home = () => {
-  const [activeFolderId,setActiveFolderId]=useState(null)
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [activeFolderId, setActiveFolderId] = useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
-  const {totalCollectedTk,totalCollectedTkRefetch}=useGetTotalCollected()
+  const { totalCollectedTk, totalCollectedTkRefetch } = useGetTotalCollected()
   const location = useLocation().pathname.split("/");
   const id = location[2];
   console.log(totalCollectedTk)
@@ -101,8 +103,8 @@ const Home = () => {
       children: [
 
       ],
-      work: [ ],
-      parent:activeFolderId
+      work: [],
+      parent: activeFolderId
     },
   ];
 
@@ -127,11 +129,45 @@ const Home = () => {
     }
   };
 
+
+  // start search results
+  const performSearch = async (query) => {
+    if (query.trim() === "") {
+      setSearchResults([]);
+      return;
+    }
+
+    const response = await axios.get(`http://localhost:5000/api/search?query=${query}`);
+    const data = await response.data;
+    setSearchResults(data);
+  };
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return function (...args) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  };
+
+  const debouncedSearch = debounce(performSearch, 300);
+
+  useEffect(() => {
+    debouncedSearch(searchText);
+  }, [searchText]);
+
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
       <div className="w-3/5 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
 
-        <TopMenu/>
+        <TopMenu
+          searchText={searchText}
+          setSearchText={setSearchText}
+          searchResults={searchResults}
+        />
 
         <div className="w-full flex flex-col">
           <ul className="flex items-center border-b-2 mr-5 border-black pb-1 justify-between">
@@ -146,11 +182,11 @@ const Home = () => {
             <li className="w-full font-bold text-center">Actions</li>
           </ul>
           <div className="w-full overflow-y-scroll h-[300px] mb-5 pt-2">
-            {allFolder?.rootFolders?.map((folder,index) => (
+            {allFolder?.rootFolders?.map((folder, index) => (
               <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} folder={folder} />
             ))}
 
-            <Outlet />
+            <Outlet context={{searchResults}} />
           </div>
           <div className="items-end absolute m-2 bottom-0 left-0">
             <form onSubmit={handleSubmit} className="w-full">
@@ -210,7 +246,7 @@ const Home = () => {
         </div>
       </div>
       <div className="w-1/4 h-[450px] bg-black p-6 backdrop-blur-sm bg-opacity-50">
-        <Expense/>
+        <Expense />
       </div>
     </div>
   );
