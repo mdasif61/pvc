@@ -1,19 +1,23 @@
-
 import { useOutletContext } from "react-router";
 import useGetProduct from "../hooks/useGetProduct";
 import ReusableWork from "./ReusableWork";
 
 const HomeContent = () => {
   const { allProduct } = useGetProduct();
-  const {searchResults}=useOutletContext();
+  const { searchResults, searchText } = useOutletContext();
+  console.log(searchResults)
 
-  const renderData=searchResults.length>0?searchResults:allProduct
+  const renderData = searchText.trim() === "" ? allProduct : searchResults;
 
   return (
     <div>
-      {renderData?.map((product) => (
-        <ReusableWork key={product._id} product={product} />
-      ))}
+      {renderData?.length > 0 ? (
+        renderData.map((product) => (
+          <ReusableWork key={product._id} product={product} />
+        ))
+      ) : (
+        <p className="text-center">No matching data</p>
+      )}
     </div>
   );
 };

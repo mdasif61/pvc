@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 
 const TopMenu = ({searchText,setSearchText,setSearchResults}) => {
-    
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();

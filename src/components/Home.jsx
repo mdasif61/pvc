@@ -19,7 +19,6 @@ const Home = () => {
   const { totalCollectedTk, totalCollectedTkRefetch } = useGetTotalCollected()
   const location = useLocation().pathname.split("/");
   const id = location[2];
-  console.log(totalCollectedTk)
 
 
   const {
@@ -137,9 +136,22 @@ const Home = () => {
       return;
     }
 
-    const response = await axios.get(`http://localhost:5000/api/search?query=${query}`);
-    const data = await response.data;
-    setSearchResults(data);
+    if (!id) {
+      const response = await axios.get(`http://localhost:5000/api/search?query=${query}`);
+      const data = await response.data;
+      if (data.length === 0) {
+        setSearchResults([])
+      }
+      setSearchResults(data);
+    } else {
+      const response = await axios.get(`http://localhost:5000/api/search-folder-work/${id}?query=${query}`);
+      const data = await response.data;
+      if (data.length === 0) {
+        setSearchResults([])
+      }
+      setSearchResults(data);
+    }
+
   };
   const debounce = (func, delay) => {
     let timeoutId;
@@ -183,10 +195,10 @@ const Home = () => {
           </ul>
           <div className="w-full overflow-y-scroll h-[300px] mb-5 pt-2">
             {allFolder?.rootFolders?.map((folder, index) => (
-              <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} folder={folder} />
+              <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} searchResults={searchResults} folder={folder} />
             ))}
 
-            <Outlet context={{searchResults}} />
+            <Outlet context={{ searchResults, searchText }} />
           </div>
           <div className="items-end absolute m-2 bottom-0 left-0">
             <form onSubmit={handleSubmit} className="w-full">

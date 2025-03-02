@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import useGetFolder from "../hooks/useGetFolder";
 import { ArrowBigLeft } from "lucide-react";
 
-const Folder = ({ folder, setActiveFolderId, index }) => {
+const Folder = ({ folder, setActiveFolderId, searchResults }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleFolder = () => setIsOpen(!isOpen);
   const [rename, setRename] = useState(false);
@@ -25,7 +25,7 @@ const Folder = ({ folder, setActiveFolderId, index }) => {
   const getFolder = (folder) => {
     setIsFolderOpened(true);
     setActiveFolderId(folder._id);
-    navigate(`/folders/${folder?._id}`, { state: { folder } });
+    navigate(`/folders/${folder?._id}`, { state: { folder, searchResults } });
   };
 
   const handleRenameOfFolder = (e) => {
@@ -108,6 +108,7 @@ const Folder = ({ folder, setActiveFolderId, index }) => {
                 key={child._id}
                 folder={child}
                 setActiveFolderId={setActiveFolderId}
+                searchResults={searchResults}
               />
             ))}
           </div>
