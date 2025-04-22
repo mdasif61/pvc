@@ -1,10 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { XCircle } from 'lucide-react';
 import moment from 'moment';
 import React, { useState } from 'react';
 import { data, useLocation } from 'react-router';
 
 const ReusableWork = ({ product }) => {
+    const [showDelete, setShowDelete] = useState(false)
     const [collected, setCollected] = useState({ collectedTk: product.collectedTk } || 0);
     const [dues, setDues] = useState({ dues: product.dues } || 0)
 
@@ -39,10 +41,14 @@ const ReusableWork = ({ product }) => {
     const handleCollectedAndDues = (id) => {
         mutate({ id, collectedAndduesAmount: [collected, dues] })
     }
-    
+
+    const handleDeleteWork=(id)=>{
+        console.log(id)
+    }
+
     return (
         <>
-            <div key={product._id} className="flex justify-between border-b">
+            <div key={product._id} className="flex relative justify-between border-b">
                 <div className="w-full flex items-center flex-col">
                     <input
                         readOnly
@@ -114,13 +120,24 @@ const ReusableWork = ({ product }) => {
                         type="text"
                     />
                 </div>
-                <div className="flex items-center text-center w-full">
+                <div className="flex bg-black items-center justify-between text-center w-full">
                     <button onClick={() => {
                         handleCollectedAndDues(product._id)
-                    }} className={`h-full w-full text-center btn btn-neutral rounded-none`}>
+                    }} className={`h-full w-1/2 text-center btn btn-neutral rounded-none`}>
                         Save
                     </button>
+                    <button onClick={() => setShowDelete(!showDelete)} className='w-1/2 bg-red-400 hover:bg-red-500 h-full text-white flex items-center
+                     justify-center'><XCircle /></button>
                 </div>
+                {showDelete && <div className='absolute z-50 right-10 top-10 rounded-md border overflow-hidden shadow-sm bg-white'>
+                    <div className='p-2 font-semibold'>
+                        Are you sure? for delete
+                    </div>
+                    <div className='flex items-center'>
+                        <button onClick={()=>handleDeleteWork(product._id)} className='bg-red-500 hover:bg-red-600 text-white font-medium w-full'>Yes</button>
+                        <button onClick={()=>setShowDelete(false)} className='bg-gray-700 hover:bg-gray-800 text-white font-medium w-full'>No</button>
+                    </div>
+                </div>}
             </div>
         </>
     );
