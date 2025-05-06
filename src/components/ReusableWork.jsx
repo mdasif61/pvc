@@ -42,8 +42,35 @@ const ReusableWork = ({ product }) => {
         mutate({ id, collectedAndduesAmount: [collected, dues] })
     }
 
-    const handleDeleteWork=(id)=>{
-        console.log(id)
+    // delete fun start
+
+    const deleteWorkHandle = async ({ id }) => {
+        try {
+            if (!folderPageId) {
+                const response = await axios.delete(`http://localhost:5000/api/delete-work/${id}`)
+                return response.data;
+            } else {
+                const response = await axios.delete
+                (`http://localhost:5000/api/folder-delete-work/${id}?folderid=${folderPageId}`)
+                return response.data;
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const mutation = useMutation({
+        mutationFn: deleteWorkHandle,
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        onError: (error) => {
+            console.log(error)
+        }
+    })
+
+    const handleDeleteWork = (id) => {
+        mutation.mutate({ id })
     }
 
     return (
@@ -134,8 +161,8 @@ const ReusableWork = ({ product }) => {
                         Are you sure? for delete
                     </div>
                     <div className='flex items-center'>
-                        <button onClick={()=>handleDeleteWork(product._id)} className='bg-red-500 hover:bg-red-600 text-white font-medium w-full'>Yes</button>
-                        <button onClick={()=>setShowDelete(false)} className='bg-gray-700 hover:bg-gray-800 text-white font-medium w-full'>No</button>
+                        <button onClick={() => handleDeleteWork(product._id)} className='bg-red-500 hover:bg-red-600 text-white font-medium w-full'>Yes</button>
+                        <button onClick={() => setShowDelete(false)} className='bg-gray-700 hover:bg-gray-800 text-white font-medium w-full'>No</button>
                     </div>
                 </div>}
             </div>

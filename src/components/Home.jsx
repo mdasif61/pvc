@@ -16,16 +16,16 @@ const Home = () => {
   const [activeFolderId, setActiveFolderId] = useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
-  const { totalCollectedTk, totalCollectedTkRefetch } = useGetTotalCollected()
+  // const { totalCollectedTk, totalCollectedTkRefetch } = useGetTotalCollected()
   const location = useLocation().pathname.split("/");
   const id = location[2];
 
 
-  const {
-    sizeAndQuantity,
-    isLoading: sizeQuanLoading,
-    refetch: sizeAndQuanLoading,
-  } = useSizeAndQuantityCalc(allProduct?.map((product) => product?._id || []));
+  // const {
+  //   sizeAndQuantity,
+  //   isLoading: sizeQuanLoading,
+  //   refetch: sizeAndQuanLoading,
+  // } = useSizeAndQuantityCalc(allProduct?.map((product) => product?._id || []));
 
   const handleSubmit = async (event) => {
     event.preventDefault();
