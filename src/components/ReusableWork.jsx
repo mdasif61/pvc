@@ -42,7 +42,7 @@ const ReusableWork = ({ product }) => {
         mutate({ id, collectedAndduesAmount: [collected, dues] })
     }
 
-    // delete fun start
+    // delete function start
 
     const deleteWorkHandle = async ({ id }) => {
         try {
@@ -51,7 +51,7 @@ const ReusableWork = ({ product }) => {
                 return response.data;
             } else {
                 const response = await axios.delete
-                (`http://localhost:5000/api/folder-delete-work/${id}?folderid=${folderPageId}`)
+                    (`http://localhost:5000/api/folder-delete-work/${id}?folderid=${folderPageId}`)
                 return response.data;
             }
         } catch (error) {
@@ -72,6 +72,18 @@ const ReusableWork = ({ product }) => {
     const handleDeleteWork = (id) => {
         mutation.mutate({ id })
     }
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            mutate({
+                id: product._id,
+                collectedAndduesAmount: [collected, dues]
+            });
+        } else if (e.key === "Escape") {
+            return;
+        }
+    };
 
     return (
         <>
@@ -129,6 +141,7 @@ const ReusableWork = ({ product }) => {
                 </div>
                 <div className="w-full flex items-center">
                     <input
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => {
                             setCollected({ id: product._id, collectedTk: e.target.value });
                         }}
@@ -140,6 +153,7 @@ const ReusableWork = ({ product }) => {
                 </div>
                 <div className="w-full flex items-center">
                     <input
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => setDues({ id: product._id, dues: e.target.value })}
                         defaultValue={product.dues && product.dues || 0}
                         placeholder='Dues'
