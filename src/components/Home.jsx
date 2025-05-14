@@ -173,7 +173,7 @@ const Home = () => {
 
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
-      <div className="w-3/5 relative h-[450px] bg-white p-6 backdrop-blur-xl opacity-90">
+      <div className="w-3/5 relative h-[475px] bg-white p-6 backdrop-blur-xl opacity-90">
 
         <TopMenu
           searchText={searchText}
@@ -257,7 +257,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-1/4 h-[450px] bg-black p-6 backdrop-blur-sm bg-opacity-50">
+      <div className="w-1/4 h-[475px] bg-black p-6 backdrop-blur-sm bg-opacity-50">
         <Expense />
       </div>
     </div>

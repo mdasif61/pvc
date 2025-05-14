@@ -70,6 +70,16 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
     return null;
   }
 
+  const handleFolderDelete =async () => {
+    const response = await axios.delete(
+      `http://localhost:5000/api/delete-folder/${folder._id}`
+    );
+    if(response.status===201){
+      folderFetch()
+    }
+  }
+
+
   return (
     <>
       <div onClick={handleCloseMenu}>
@@ -77,9 +87,8 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
           onContextMenu={handleRenameOfFolder}
           onDoubleClick={() => getFolder(folder)}
           onClick={toggleFolder}
-          className={`cursor-pointer flex items-center hover:bg-gray-100 my-1 ${
-            folder.type === "folder" ? "font-semibold" : "font-normal"
-          }`}
+          className={`cursor-pointer flex items-center hover:bg-gray-100 my-1 ${folder.type === "folder" ? "font-semibold" : "font-normal"
+            }`}
         >
           {folder.type === "folder" ? (isOpen ? "📂" : "📁") : "📄"}{" "}
           {rename ? (
@@ -120,9 +129,15 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
           >
             <button
               onClick={handleRename}
-              className="block w-full text-left px-2 py-1 hover:bg-gray-200"
+              className="block w-full p-1 text-center hover:bg-gray-200"
             >
               Rename
+            </button>
+            <button
+              onClick={handleFolderDelete}
+              className="block w-full p-1 text-center hover:bg-gray-200"
+            >
+              Delete
             </button>
           </div>
         )}
