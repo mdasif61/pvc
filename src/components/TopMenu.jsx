@@ -3,25 +3,26 @@ import { Label, Select } from 'flowbite-react';
 import { ArrowLeft, SearchIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import useCheckDuesAndCollect from '../hooks/useCheckDuesAndCollect';
 
 const TopMenu = ({ searchText, setSearchText, setSearchResults }) => {
-
     const location = useLocation().pathname;
-    const folderId=location.split("/")[2];
+    const folderId = location.split("/")[2];
+    const [checkQuery, setCheckQuery] = useState(null)
+
+    const { dcRefetch, duesAndCollect } = useCheckDuesAndCollect(folderId, checkQuery)
+
+    const checkDuesAndCollected = async (e) => {
+        const checkValue = e.target.value
+        setCheckQuery(checkValue)
+        dcRefetch()
+    }
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
         } else if (e.key === "Escape") {
             setSearchText("");
-        }
-    }
-
-    const checkDuesAndCollected=async(e)=>{
-        try {
-            const response=await axios.get(`http://localhost:5000/api/options/${folderId}?query=${e.target.value}`)
-        } catch (error) {
-            
         }
     }
 

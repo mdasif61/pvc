@@ -1,13 +1,15 @@
 import { useOutletContext } from "react-router";
 import useGetProduct from "../hooks/useGetProduct";
 import ReusableWork from "./ReusableWork";
+import useCheckDuesAndCollect from "../hooks/useCheckDuesAndCollect";
 
 const HomeContent = () => {
   const { allProduct } = useGetProduct();
   const { searchResults, searchText } = useOutletContext();
-  console.log(searchResults)
+  const {dcRefetch,duesAndCollect}=useCheckDuesAndCollect();
+  console.log(duesAndCollect)
 
-  const renderData = searchText.trim() === "" ? allProduct : searchResults;
+  const renderData = searchText.trim() === "" ?  allProduct : searchResults;
 
   return (
     <div>
