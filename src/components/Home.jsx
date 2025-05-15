@@ -172,6 +172,7 @@ const Home = () => {
     debouncedSearch(searchText);
   }, [searchText]);
 
+
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
       <div className="w-3/5 relative h-[475px] bg-white p-6 backdrop-blur-xl opacity-90">
