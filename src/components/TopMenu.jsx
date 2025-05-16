@@ -3,20 +3,20 @@ import { Label, Select } from 'flowbite-react';
 import { ArrowLeft, SearchIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import useCheckDuesAndCollect from '../hooks/useCheckDuesAndCollect';
+// import useCheckDuesAndCollect from '../hooks/useCheckDuesAndCollect';
 
-const TopMenu = ({ searchText, setSearchText, setSearchResults }) => {
+const TopMenu = ({ searchText, setSearchText,checkDuesAndCollected, setSearchResults }) => {
     const location = useLocation().pathname;
     const folderId = location.split("/")[2];
     const [checkQuery, setCheckQuery] = useState(null)
 
-    const { dcRefetch, duesAndCollect } = useCheckDuesAndCollect(folderId, checkQuery)
+    // const { dcRefetch, duesAndCollect } = useCheckDuesAndCollect(folderId, checkQuery)
 
-    const checkDuesAndCollected = async (e) => {
-        const checkValue = e.target.value
-        setCheckQuery(checkValue)
-        dcRefetch()
-    }
+    // const checkDuesAndCollected = async (e) => {
+    //     const checkValue = e.target.value
+    //     setCheckQuery(checkValue)
+    //     dcRefetch()
+    // }
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -36,7 +36,7 @@ const TopMenu = ({ searchText, setSearchText, setSearchResults }) => {
             </div>
 
             <div className="w-48 bg-black h-full m-2">
-                <select onChange={checkDuesAndCollected} className='w-full h-full border px-2 py-1 focus:ring-0 focus:outline-none'>
+                <select onChange={(e)=>checkDuesAndCollected({value:e.target.value,folderId:folderId})} className='w-full h-full border px-2 py-1 focus:ring-0 focus:outline-none'>
                     <option disabled selected>Customers</option>
                     <option>All</option>
                     <option>Collected</option>

@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import Expense from "./Expense";
 import useGetTotalCollected from "../hooks/useGetTotalCollected";
 import TopMenu from "./TopMenu";
-import { ArrowLeft } from "lucide-react";
 
 const Home = () => {
   const [searchText, setSearchText] = useState("");
@@ -17,6 +16,7 @@ const Home = () => {
   const [activeFolderId, setActiveFolderId] = useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
+  const [duesAndCollect,setDuesAndCollect]=useState([])
   // const { totalCollectedTk, totalCollectedTkRefetch } = useGetTotalCollected()
   const location = useLocation().pathname.split("/");
   const id = location[2];
@@ -172,6 +172,11 @@ const Home = () => {
     debouncedSearch(searchText);
   }, [searchText]);
 
+  const checkDuesAndCollected = async ({value,folderId}) => {
+    const response = await axios.get(`http://localhost:5000/api/options/${folderId}?query=${value}`);
+    setDuesAndCollect(response.data)
+  }
+
 
   return (
     <div className="flex fixed left-0 top-0 w-full gap-6 min-h-screen items-center justify-center">
@@ -181,6 +186,7 @@ const Home = () => {
           searchText={searchText}
           setSearchText={setSearchText}
           searchResults={searchResults}
+          checkDuesAndCollected={checkDuesAndCollected}
         />
 
         <div className="w-full flex flex-col">
@@ -200,7 +206,7 @@ const Home = () => {
               <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} searchResults={searchResults} folder={folder} />
             ))}
 
-            <Outlet context={{ searchResults, searchText }} />
+            <Outlet context={{ searchResults,duesAndCollect, searchText }} />
           </div>
           <div className="items-end absolute m-2 bottom-0 left-0">
             <form onSubmit={handleSubmit} className="w-full">

@@ -6,26 +6,41 @@ import ReusableWork from './ReusableWork';
 const FolderData = () => {
     const { id } = useParams();
     const { allFolder } = useGetFolder();
-    const { searchResults, searchText } = useOutletContext()
-    const filterFolder =allFolder?.rootFolders?.find((folder) => folder._id === id);
-
+    const { searchResults, searchText, duesAndCollect } = useOutletContext();
+    const filterFolder = allFolder?.rootFolders?.find((folder) => folder._id === id);
     const subfolders = allFolder?.subfolders?.find((subfolder) => subfolder._id === id);
 
+    // Priority 1: Show duesAndCollect if it has items
+    if (duesAndCollect?.length > 0) {
+        return (
+            <div>
+                {duesAndCollect.map((folderWork) => (
+                    <ReusableWork key={folderWork._id} product={folderWork} />
+                ))}
+            </div>
+        );
+    }
+
+    // Priority 2: Show search results if search is active
+    if (searchResults.length > 0) {
+        return (
+            <div>
+                {searchResults.map((folderWork) => (
+                    <ReusableWork key={folderWork._id} product={folderWork} />
+                ))}
+            </div>
+        );
+    }
+
+    // Priority 3: Show regular folder content when no search and no duesAndCollect
     return (
         <div>
-            {searchResults.length > 0 ? <>
-                {searchResults.map((folderWork) => (
-                    <ReusableWork product={folderWork} />
-                ))}
-            </> : <>
-                {searchText.trim() === "" && filterFolder?.work?.map((folderWork) => (
-                    <ReusableWork key={folderWork._id} product={folderWork} />
-                ))}
-                {searchText.trim() === "" && subfolders && subfolders?.work?.map((folderWork) => (
-                    <ReusableWork key={folderWork._id} product={folderWork} />
-                ))}
-            </>}
-
+            {filterFolder?.work?.map((folderWork) => (
+                <ReusableWork key={folderWork._id} product={folderWork} />
+            ))}
+            {subfolders?.work?.map((folderWork) => (
+                <ReusableWork key={folderWork._id} product={folderWork} />
+            ))}
         </div>
     );
 };
