@@ -124,7 +124,7 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
         )}
         {contextMenu && (
           <div
-            className="fixed bg-white border rounded shadow-md p-2"
+            className="fixed bg-white border z-50 rounded shadow-md p-2"
             style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
           >
             <button

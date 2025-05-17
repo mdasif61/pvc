@@ -6,15 +6,16 @@ import ReusableWork from './ReusableWork';
 const FolderData = () => {
     const { id } = useParams();
     const { allFolder } = useGetFolder();
-    const { searchResults, searchText, duesAndCollect } = useOutletContext();
+    const { searchResults, searchText, duesAndCollect,showDuestAndCollectd } = useOutletContext();
+    console.log(duesAndCollect)
     const filterFolder = allFolder?.rootFolders?.find((folder) => folder._id === id);
     const subfolders = allFolder?.subfolders?.find((subfolder) => subfolder._id === id);
 
     // Priority 1: Show duesAndCollect if it has items
-    if (duesAndCollect?.length > 0) {
+    if (showDuestAndCollectd) {
         return (
             <div>
-                {duesAndCollect.map((folderWork) => (
+                {duesAndCollect?.map((folderWork) => (
                     <ReusableWork key={folderWork._id} product={folderWork} />
                 ))}
             </div>

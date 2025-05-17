@@ -1,22 +1,11 @@
-import axios from 'axios';
-import { Label, Select } from 'flowbite-react';
 import { ArrowLeft, SearchIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router';
-// import useCheckDuesAndCollect from '../hooks/useCheckDuesAndCollect';
 
-const TopMenu = ({ searchText, setSearchText,checkDuesAndCollected, setSearchResults }) => {
+const TopMenu = ({setSearchText,checkDuesAndCollected, setShowDuesAndCollected }) => {
     const location = useLocation().pathname;
     const folderId = location.split("/")[2];
-    const [checkQuery, setCheckQuery] = useState(null)
 
-    // const { dcRefetch, duesAndCollect } = useCheckDuesAndCollect(folderId, checkQuery)
-
-    // const checkDuesAndCollected = async (e) => {
-    //     const checkValue = e.target.value
-    //     setCheckQuery(checkValue)
-    //     dcRefetch()
-    // }
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
@@ -29,7 +18,7 @@ const TopMenu = ({ searchText, setSearchText,checkDuesAndCollected, setSearchRes
     return (
         <div className='flex h-8 items-center mb-2'>
             {location !== "/" && <div>
-                <Link to='/' className='text-gray-500 hover:text-gray-700'><ArrowLeft /></Link>
+                <Link onClick={()=>setShowDuesAndCollected(false)} to='/' className='text-gray-500 hover:text-gray-700'><ArrowLeft /></Link>
             </div>}
             <div>
                 <Link to='/details' className="bg-blue-500 py-1 px-2 hover:bg-blue-400 font-semibold text-md text-white">Details</Link>

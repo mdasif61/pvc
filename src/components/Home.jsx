@@ -13,6 +13,7 @@ import TopMenu from "./TopMenu";
 const Home = () => {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [showDuestAndCollectd,setShowDuesAndCollected]=useState(false)
   const [activeFolderId, setActiveFolderId] = useState(null)
   const { allProduct, isLoading, refetch } = useGetProduct();
   const { allFolder, folderFetch } = useGetFolder();
@@ -175,6 +176,7 @@ const Home = () => {
   const checkDuesAndCollected = async ({value,folderId}) => {
     const response = await axios.get(`http://localhost:5000/api/options/${folderId}?query=${value}`);
     setDuesAndCollect(response.data)
+    setShowDuesAndCollected(true)
   }
 
 
@@ -187,6 +189,7 @@ const Home = () => {
           setSearchText={setSearchText}
           searchResults={searchResults}
           checkDuesAndCollected={checkDuesAndCollected}
+          setShowDuesAndCollected={setShowDuesAndCollected}
         />
 
         <div className="w-full flex flex-col">
@@ -206,7 +209,7 @@ const Home = () => {
               <Folder key={folder._id} index={index} setActiveFolderId={setActiveFolderId} searchResults={searchResults} folder={folder} />
             ))}
 
-            <Outlet context={{ searchResults,duesAndCollect, searchText }} />
+            <Outlet context={{ searchResults,duesAndCollect,showDuestAndCollectd, searchText }} />
           </div>
           <div className="items-end absolute m-2 bottom-0 left-0">
             <form onSubmit={handleSubmit} className="w-full">
