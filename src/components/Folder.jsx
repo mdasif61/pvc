@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import useGetFolder from "../hooks/useGetFolder";
 import { ArrowBigLeft } from "lucide-react";
@@ -12,6 +12,8 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
   const [newName, setNewName] = useState(folder.name);
   const [contextMenu, setContextMenu] = useState(null);
   const [isFolderOpened, setIsFolderOpened] = useState(false);
+  const contextMenuRef = useRef(null);
+  const renameInputRef = useRef(null);
   const navigate = useNavigate();
 
 
@@ -22,10 +24,31 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
     setIsFolderOpened(!!folderPageId);
   }, [folderPageId]);
 
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      // Close context menu if clicked outside
+      if (contextMenu && contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
+        setContextMenu(null);
+      }
+
+      // Close rename input if clicked outside
+      if (rename && renameInputRef.current && !renameInputRef.current.contains(e.target)) {
+        handleSubmitRename();
+        setRename(false);
+      }
+    };
+
+    document.addEventListener("click", handleGlobalClick);
+    return () => document.removeEventListener("click", handleGlobalClick);
+  }, [contextMenu, rename]);
+
+
+
+
   const getFolder = (folder) => {
     setIsFolderOpened(true);
     setActiveFolderId(folder._id);
-    navigate(`/folders/${folder?._id}`, { state: { folder, searchResults } });
+    navigate(`/folders/${folder?._id}/${folder?.name}`, { state: { folder, searchResults } });
   };
 
   const handleRenameOfFolder = (e) => {
@@ -70,15 +93,14 @@ const Folder = ({ folder, setActiveFolderId, searchResults }) => {
     return null;
   }
 
-  const handleFolderDelete =async () => {
+  const handleFolderDelete = async () => {
     const response = await axios.delete(
       `http://localhost:5000/api/delete-folder/${folder._id}`
     );
-    if(response.status===201){
+    if (response.status === 201) {
       folderFetch()
     }
   }
-
 
   return (
     <>

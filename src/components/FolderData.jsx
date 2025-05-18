@@ -7,7 +7,6 @@ const FolderData = () => {
     const { id } = useParams();
     const { allFolder } = useGetFolder();
     const { searchResults, searchText, duesAndCollect,showDuestAndCollectd } = useOutletContext();
-    console.log(duesAndCollect)
     const filterFolder = allFolder?.rootFolders?.find((folder) => folder._id === id);
     const subfolders = allFolder?.subfolders?.find((subfolder) => subfolder._id === id);
 
